@@ -1,0 +1,40 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 6rem;
+  min-height: 100vh;
+} 
+
+.beerContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.inputRow {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.input {
+  height: 30px;
+}
+
+.button {
+  height: 30px;
+  width: 100px;
+  background-color: darkgray;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.trash {
+  margin-top: 5px;
+}
