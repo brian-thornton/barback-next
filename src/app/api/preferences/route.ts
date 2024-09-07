@@ -3,7 +3,7 @@ import { read, write } from "../../../lib/file-adapter";
 
 // Handles GET requests to /api
 export async function GET(request: Request) {
-  const data = read("beers", "beers", "./data");
+  const data = read("preferences", "preferences", "./data");
   return NextResponse.json(data);
 };
 
@@ -11,6 +11,6 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   const data = await request.json();
   console.log(data)
-  write("beers", "beers", data, "./data");
+  write("preferences", "preferences", data, "./data");
   return NextResponse.json({ message: "OK" });
 }

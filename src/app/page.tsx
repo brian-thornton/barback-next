@@ -1,53 +1,43 @@
 "use client";
-import { useState, useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
 import styles from "./page.module.css";
-
-type Beer = {
-  id: number;
-  name: string;
-  brewery: string;
-  abv: number;
-  ibu: number;
-  style: string;
-  description: string;
-};
+import FullWidthBeerMenu from "@/components/FullWidthBeerMenu/FullWidthBeerMenu";
+import FullWidthSpiritMenu from "@/components/FullWidthSpiritMenu/FullWidthSpiritMenu";
 
 export default function Home() {
-  const [beers, setBeers] = useState<any>([]);
+  const [menu, setMenu] = useState<string>("beer");
+  const [preferences, setPreferences] = useState<any>();
 
-  const loadBeer = async () => {
+  setInterval(() => changeMenu(), 30000);
+
+  const loadPreferences = async () => {
     try {
-      const res = await fetch(`/api/beers`);
+      const res = await fetch(`/api/preferences`);
       const data = await res.json();
-      console.log(data);
-      setBeers(data.beers);
+      setPreferences(data.preferences);
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    loadBeer();
+    loadPreferences();
   }, []);
 
-  return beers?.length ? (
+  const changeMenu = () => {
+    if (menu === "beer") {
+      setMenu("spirits");
+    }
+
+    if (menu === "spirits") {
+      setMenu("beer");
+    }
+  };
+
+  return (
     <main className={styles.main}>
-      <div className={styles.row}>
-        <div className={styles.header}>Name</div>
-        <div className={styles.header}>Type</div>
-        <div className={styles.header}>Brewery</div>
-        <div className={styles.header}>ABV</div>
-      </div>
-      {beers.map((beer: any) => (
-        <div className={styles.row}>
-          <div className={styles.text}>{beer?.name}</div>
-          <div className={styles.text}>{beer?.type}</div>
-          <div className={styles.text}>{beer?.brewery}</div>
-          <div className={styles.text}>{beer?.abv}</div>
-        </div>
-      ))}
+      {menu === 'beer' && <FullWidthBeerMenu preferences={preferences} />}
+      {menu === 'spirits' && <FullWidthSpiritMenu preferences={preferences} />}
     </main>
-  ) : (
-    <div>No beers configured</div>
   );
-}
+};
