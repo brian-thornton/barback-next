@@ -10,7 +10,6 @@ export async function GET(request: Request) {
 // Handles POST requests to /api
 export async function POST(request: Request) {
   const data = await request.json();
-  console.log(data)
   write("spirits", "spirits", data, "./data");
   return NextResponse.json({ message: "OK" });
 }

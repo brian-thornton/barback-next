@@ -1,9 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styles from "./page.module.css";
 import { BsTrash3 } from "react-icons/bs";
 import ConfigurationHeader from "../../components/ConfigurationHeader/ConfigurationHeader";
-import { HexColorPicker } from "react-colorful";
 
 import { getData, postData } from "../../lib/service-client";
 import ColorPicker from "@/components/ColorPicker/ColorPicker";
@@ -31,11 +30,11 @@ export default function BeerConfigPage() {
   useEffect(() => {
     if (colors) {
       setPreferences({
+        beerCellBackgroundColor: colors.cellBackgroundColor,
+        beerCellTextColor: colors.cellTextColor,
+        beerHeaderTextColor: colors.headerTextColor,
         beerMenuType: MenuType.FullWidth,
         beerRowBackgroundColor: colors.rowBackgroundColor,
-        beerCellBackgroundColor: colors.cellBackgroundColor,
-        beerHeaderTextColor: colors.headerTextColor,
-        beerCellTextColor: colors.cellTextColor,
       });
     }
   }, [colors]);
@@ -51,10 +50,10 @@ export default function BeerConfigPage() {
       const data = await res.json();
       setPreferences(data.preferences);
       setColors({
-        rowBackgroundColor: data.preferences.beerRowBackgroundColor || "#000000",
         cellBackgroundColor: data.preferences.beerCellBackgroundColor || "#000000",
-        headerTextColor: data.preferences.beerHeaderTextColor || "#000000",
         cellTextColor: data.preferences.beerCellTextColor || "#000000",
+        headerTextColor: data.preferences.beerHeaderTextColor || "#000000",
+        rowBackgroundColor: data.preferences.beerRowBackgroundColor || "#000000",
       })
     } catch (err) {
       console.log(err);
@@ -94,15 +93,48 @@ export default function BeerConfigPage() {
     setPreferences({ menuType: e.target.value });
   };
 
+  const fileInput = useRef<HTMLInputElement>(null);
+
+  async function uploadFile(
+    evt: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) {
+
+    setPreferences({
+      ...preferences,
+      beerBackgroundImage: fileInput?.current?.files?.[0].name,
+    });
+
+    evt.preventDefault();
+
+    const formData = new FormData();
+    formData.append("file", fileInput?.current?.files?.[0]!);
+
+    const response = await fetch("/api/preferences/background", {
+      method: "POST",
+      body: formData,
+    });
+    const result = await response.json();
+    console.log(result);
+  }
+
   return (
     <main className={styles.main}>
       <ConfigurationHeader />
       <h1 className={styles.header}>Beers</h1>
       <div className={styles.beerContainer}>
         <div className={styles.selectContainer}>
+          <form className="flex flex-col gap-4">
+            <label>
+              <span>Upload a file</span>
+              <input type="file" name="file" ref={fileInput} />
+            </label>
+            <button type="submit" onClick={uploadFile}>
+              Submit
+            </button>
+          </form>
           <div>Menu Type:</div>
-          <select className={styles.selectContainer} onChange={onSelectMenuType}>
-            <option value={MenuType.FullWidth}>Full Width</option>
+          <select className={styles.selectContainer} onSelect={onSelectMenuType} >
+            <option value={MenuType.FullWidth} >Full Width</option>
             <option value={MenuType.TwoColumn}>Two Column</option>
           </select>
         </div>

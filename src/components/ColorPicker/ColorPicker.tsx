@@ -20,8 +20,6 @@ const ColorPicker = ({ colors, onChange }: ColorPickerProps) => {
   const [headerTextColor, setHeaderTextColor] = useState(colors.headerTextColor);
   const [cellTextColor, setCellTextColor] = useState(colors.cellTextColor);
 
-  console.log(colors)
-
   useEffect(() => {
     onChange({
       rowBackgroundColor,

@@ -8,7 +8,7 @@ export default function Home() {
   const [menu, setMenu] = useState<string>("beer");
   const [preferences, setPreferences] = useState<any>();
 
-  setInterval(() => changeMenu(), 30000);
+  // setInterval(() => changeMenu(), 30000);
 
   const loadPreferences = async () => {
     try {

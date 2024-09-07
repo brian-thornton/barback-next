@@ -9,7 +9,6 @@ export default function FullWidthSpiritMenu({preferences}: any) {
     try {
       const res = await fetch(`/api/spirits`);
       const data = await res.json();
-      console.log(data);
       setSpirits(data.spirits);
     } catch (err) {
       console.log(err);

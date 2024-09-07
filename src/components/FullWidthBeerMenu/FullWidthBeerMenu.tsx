@@ -10,7 +10,6 @@ export default function FullWidthBeerMenu({preferences}: any) {
     try {
       const res = await fetch(`/api/beers`);
       const data = await res.json();
-      console.log(data);
       setBeers(data.beers);
     } catch (err) {
       console.log(err);
