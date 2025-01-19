@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 200" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <!-- Boat hull -->
+  <path d="M50 100 C70 80, 200 60, 450 100 L430 130 C200 110, 70 130, 50 100 Z" 
+        fill="black" />
+
+  <!-- Boat deck -->
+  <rect x="150" y="70" width="200" height="20" fill="black" />
+
+  <!-- Center console -->
+  <rect x="250" y="50" width="30" height="40" fill="black" />
+
+  <!-- Engine -->
+  <rect x="430" y="115" width="15" height="35" fill="black" />
+
+  <!-- Boat name -->
+  <text x="200" y="150" font-family="Arial" font-size="16" fill="black">Monish A'More</text>
+</svg>

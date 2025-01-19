@@ -1,14 +1,13 @@
 "use client";
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./page.module.css";
-import FullWidthBeerMenu from "@/components/FullWidthBeerMenu/FullWidthBeerMenu";
-import FullWidthSpiritMenu from "@/components/FullWidthSpiritMenu/FullWidthSpiritMenu";
+import DisplayMenu from "@/components/DisplayMenu/DisplayMenu";
 
 export default function Home() {
-  const [menu, setMenu] = useState<string>("beer");
   const [preferences, setPreferences] = useState<any>();
-
-  // setInterval(() => changeMenu(), 30000);
+  const [headers, setHeaders] = useState<string[]>([]);
+  const [rows, setRows] = useState<string[][]>([]);
+  const [screenIndex, setScreenIndex] = useState<number>(0);
 
   const loadPreferences = async () => {
     try {
@@ -22,22 +21,55 @@ export default function Home() {
 
   useEffect(() => {
     loadPreferences();
+    setTimeout(() => changeMenu(), 10000);
   }, []);
 
-  const changeMenu = () => {
-    if (menu === "beer") {
-      setMenu("spirits");
+  useEffect(() => {
+    if (preferences?.screens.length > 0) {
+      setHeaders(preferences.screens[screenIndex].headers);
+      setRows(preferences.screens[screenIndex].rows);
     }
+  }, [preferences]);
 
-    if (menu === "spirits") {
-      setMenu("beer");
+  const screens = preferences?.screens || [];
+
+  const changeMenu = () => {
+    if (screens.length > 1) {
+      if (screenIndex === screens.length - 1) {
+        setScreenIndex(0);
+      } else {
+        setScreenIndex(screenIndex + 1);
+      }
     }
   };
 
+  useEffect(() => {
+    if (screens.length > 0) {
+      setHeaders(screens[screenIndex].headers);
+      setRows(screens[screenIndex].rows);
+      setTimeout(() => changeMenu(), 10000);
+    }
+  }, [screenIndex]);
+
   return (
-    <main className={styles.main}>
-      {menu === 'beer' && <FullWidthBeerMenu preferences={preferences} />}
-      {menu === 'spirits' && <FullWidthSpiritMenu preferences={preferences} />}
+    <main className={styles.main} style={{ backgroundImage: `url(./${preferences?.screens[screenIndex]?.name}_background.jpg)` }}>
+      {preferences?.screens.length > 0 && (
+        <div>
+          <DisplayMenu
+            preferences={preferences}
+            headers={headers}
+            // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'rows' implicitly has an 'any' type.
+            rows={rows || [[]]}
+            colors={preferences.screens[screenIndex].colors}
+          />
+        </div>
+      )}
+      {preferences?.screens.length === 0 && (
+        <div>
+          <h1>No screens found</h1>
+          <p>Please add a screen in the <a className={styles.link} href="/config/screens">configuration</a></p>
+        </div>
+      )}
     </main>
   );
 };

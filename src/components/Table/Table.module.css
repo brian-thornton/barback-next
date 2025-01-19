@@ -1,0 +1,63 @@
+.tableContainer {
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  margin: 2rem auto;
+  max-width: 100%;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.table {
+  background: white;
+  border-collapse: collapse;
+  font-family: system-ui, -apple-system, sans-serif;
+  width: 100%;
+}
+
+.th {
+  background: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
+  color: #1e293b;
+  font-weight: 600;
+  padding: 1rem;
+  text-align: left;
+}
+
+.td {
+  border-bottom: 1px solid #e2e8f0;
+  color: #334155;
+  padding: 1rem;
+}
+
+.tbody tr:hover {
+  background: #f8fafc;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .th, .td {
+    padding: 0.75rem;
+  }
+}
+
+.button {
+  background-color: darkgray;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  height: 30px;
+  margin-left: 10px;
+  width: 100px;
+}
+
+.inputRow {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.editIcon {
+  margin-left: 10px;
+}

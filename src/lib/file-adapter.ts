@@ -16,12 +16,12 @@ const createIfNotExists = (folder: string) => {
   }
 }
 
-const write: IWrite = (type, id, object, storageLocation) => {
+export const write: IWrite = (type, id, object, storageLocation) => {
   createIfNotExists(path.join(storageLocation, type));
   fs.writeFileSync(path.join(storageLocation, type, `${id}.json`), JSON.stringify(object, null, 2));
 }
 
-const read = (type: string, id: string, storageLocation: string) => {
+export const read = (type: string, id: string, storageLocation: string) => {
   try {
     return JSON.parse(fs.readFileSync(path.join(storageLocation, type, `${id}.json`)));
   } catch (err) {
@@ -30,7 +30,4 @@ const read = (type: string, id: string, storageLocation: string) => {
   }
 }
 
-module.exports = {
-  read,
-  write
-};
+export default read;

@@ -1,0 +1,22 @@
+.container {
+  align-items: center;
+  border-color: black;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: row;
+  height: 10vh;
+  justify-content: flex-start;
+  margin-top: 20px;
+  width: 50vw;
+}
+
+.backgroundButton {
+  background-color: darkgray;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  height: 30px;
+  margin-left: 10px;
+  width: 200px;
+}

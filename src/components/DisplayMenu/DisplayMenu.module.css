@@ -1,6 +1,5 @@
 .main {
   align-items: center;
-  background-image: url('/background.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
@@ -28,6 +27,7 @@
   flex-direction: row;
   gap: 1rem;
   margin-bottom: 10px;
+  opacity: 0.85;
   padding: 15px;
 }
 
@@ -52,5 +52,6 @@
   font-weight: 900;
   gap: 1rem;
   justify-content: center;
+  opacity: 0.85;
   width: 20vw;
 }

@@ -1,6 +1,5 @@
 .main {
   align-items: center;
-  background-image: url('/background.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   display: flex;
@@ -48,4 +47,9 @@
   gap: 1rem;
   justify-content: center;
   width: 20vw;
+}
+
+.link {
+  color: blue;
+  text-decoration: none;
 }

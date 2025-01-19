@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import styles from "./ColorPicker.module.css";
 
-type ColorType = {
+export type ColorType = {
   rowBackgroundColor: string;
   cellBackgroundColor: string;
   headerTextColor: string;
@@ -14,7 +14,7 @@ type ColorPickerProps = {
   onChange: (colors: ColorType) => void;
 }
 
-const ColorPicker = ({ colors, onChange }: ColorPickerProps) => {
+export const ColorPicker = ({ colors, onChange }: ColorPickerProps) => {
   const [rowBackgroundColor, setRowBackgroundColor] = useState(colors.rowBackgroundColor);
   const [cellBackgroundColor, setCellBackgroundColor] = useState(colors.cellBackgroundColor);
   const [headerTextColor, setHeaderTextColor] = useState(colors.headerTextColor);

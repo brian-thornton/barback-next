@@ -1,0 +1,16 @@
+{
+  "beers": [
+    {
+      "name": "Bud Light",
+      "type": "Lager",
+      "brewery": "AB",
+      "abv": "5"
+    },
+    {
+      "name": "Guiness",
+      "type": "Stout",
+      "brewery": "Guiness",
+      "abv": "4.9"
+    }
+  ]
+}

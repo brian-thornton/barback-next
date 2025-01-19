@@ -1,0 +1,37 @@
+{
+  "preferences": {
+    "screens": [
+      {
+        "name": "Beer",
+        "headers": [
+          "Name",
+          "Type",
+          "Brewery"
+        ],
+        "rows": [
+          [
+            "Bud Light",
+            "Lager",
+            "AB"
+          ],
+          [
+            "Gear Head",
+            "Hazy IPA",
+            "New Trail"
+          ],
+          [
+            "Guiness",
+            "Stout",
+            "Guiness"
+          ]
+        ],
+        "colors": {
+          "rowBackgroundColor": "#9a9a9a",
+          "cellBackgroundColor": "#ffffff",
+          "headerTextColor": "#000000",
+          "cellTextColor": "#020202"
+        }
+      }
+    ]
+  }
+}

@@ -1,7 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
+import { savePreferences } from "@/lib/preferences-helper";
+import { saveSpirits } from "@/lib/spirits-helper";
+import { postData } from "@/lib/service-client";
+import Table from "@/components/Table/Table";
+import ColorPicker from "@/components/ColorPicker/ColorPicker";
+
 import styles from "./page.module.css";
-import { BsTrash3 } from "react-icons/bs";
 import ConfigurationHeader from "../../../components/ConfigurationHeader/ConfigurationHeader";
 
 enum MenuType {
@@ -11,9 +16,14 @@ enum MenuType {
 
 export default function SpiritsConfigPage() {
   const [spirits, setSpirits] = useState<any>([]);
+  const [colors, setColors] = useState<any>(undefined);
+  const [colorsOpen, setColorsOpen] = useState<boolean>(false);
+  const saveSpirits = async () => await postData("/api/spirits", { spirits });
   const [preferences, setPreferences] = useState<any>({
     spiritMenuType: MenuType.FullWidth
   });
+  const columnHeaders = ["Name", "Type", "Distillery", "ABV", "Quantity"];
+  const tableData = spirits.map((spirit: any) => [spirit.name, spirit.type, spirit.distillery, spirit.abv, spirit.quantity]);
 
   const loadSpirits = async () => {
     try {
@@ -25,29 +35,18 @@ export default function SpiritsConfigPage() {
     }
   };
 
-  const saveSpirits = async () => {
+  const loadPreferences = async () => {
     try {
-      await fetch(`/api/spirits`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ spirits }),
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const savePreferences = async () => {
-    try {
-      await fetch(`/api/preferences`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ preferences }),
-      });
+      const res = await fetch(`/api/preferences`);
+      const data = await res.json();
+      setPreferences(data.preferences || {});
+      console.log(data);
+      setColors({
+        cellBackgroundColor: data?.preferences?.spiritCellBackgroundColor || "#000000",
+        cellTextColor: data?.preferences?.spiritCellTextColor || "#000000",
+        headerTextColor: data?.preferences?.spiritHeaderTextColor || "#000000",
+        rowBackgroundColor: data?.preferences?.spiritRowBackgroundColor || "#000000",
+      })
     } catch (err) {
       console.log(err);
     }
@@ -55,17 +54,7 @@ export default function SpiritsConfigPage() {
 
   const onSave = async () => {
     await saveSpirits();
-    await savePreferences();
-  };
-
-  const onAddClick = () => {
-    if (spirits?.length > 0) {
-      setSpirits([...spirits, { name: "", type: "", distillery: "", abv: 0, quantity: 0 }]);
-    } else {
-      setSpirits([{
-        name: "", type: "", distillery: "", abv: 0, quantity: 0
-      }]);
-    };
+    await savePreferences(preferences);
   };
 
   const onDeleteClick = (index: number) => {
@@ -75,11 +64,20 @@ export default function SpiritsConfigPage() {
 
   useEffect(() => {
     loadSpirits();
+    loadPreferences();
   }, []);
 
-  const onChange = (e: any, spirit: any, field: string) => {
-    spirit[field] = e.target.value;
-  }
+  useEffect(() => {
+    if (spirits && spirits.length) {
+      saveSpirits();
+    }
+  }, [spirits]);
+
+  useEffect(() => {
+    if (preferences.spiritRowBackgroundColor !== "#000000") {
+      savePreferences(preferences);
+    }
+  }, [preferences]);
 
   const onSelectMenuType = (e: any) => {
     setPreferences({ menuType: e.target.value });
@@ -96,20 +94,17 @@ export default function SpiritsConfigPage() {
             <option value={MenuType.FullWidth}>Full Width</option>
             <option value={MenuType.TwoColumn}>Two Column</option>
           </select>
+          <button onClick={() => setColorsOpen(!colorsOpen)}>Colors</button>
         </div>
-        {spirits?.map((spirit: any, index: number) => (
-          <div className={styles.inputRow}>
-            <input className={styles.input} defaultValue={spirit?.name} onChange={(e) => onChange(e, spirit, "name")} />
-            <input className={styles.input} defaultValue={spirit?.distillery} onChange={(e) => onChange(e, spirit, "type")} />
-            <input className={styles.input} defaultValue={spirit?.abv} onChange={(e) => onChange(e, spirit, "distillery")} />
-            <input className={styles.input} defaultValue={spirit?.quantity} onChange={(e) => onChange(e, spirit, "quantity")} />
-            <BsTrash3 className={styles.trash} onClick={() => onDeleteClick(index)} />
-          </div>
-        ))}
-        <div className={styles.inputRow}>
-          <button className={styles.button} onClick={onSave}>Save</button>
-          <button className={styles.button} onClick={onAddClick}>Add</button>
-        </div>
+        {colors && colorsOpen && <ColorPicker colors={colors} onChange={setColors} />}
+        <Table
+          columns={columnHeaders}
+          data={tableData}
+          onDeleteClick={onDeleteClick}
+          onSave={(obj: any) => {
+            setSpirits([...spirits, obj]);
+          }}
+        />
       </div>
     </main>
   );

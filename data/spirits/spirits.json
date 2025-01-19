@@ -1,0 +1,18 @@
+{
+  "spirits": [
+    {
+      "name": "dssd",
+      "type": "dsd",
+      "distillery": "",
+      "abv": 0,
+      "quantity": 0
+    },
+    {
+      "name": "asdasdasdas",
+      "type": "dasd",
+      "distillery": "d",
+      "abv": "1",
+      "quantity": "1"
+    }
+  ]
+}

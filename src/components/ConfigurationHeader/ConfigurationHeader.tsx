@@ -1,15 +1,13 @@
 import styles from "./ConfigurationHeader.module.css";
 
 const ConfigurationHeader = () => {
-  const onButtonClick = (route: string) => {
-    console.log(`${window.location.host}/${route}`)
-    window.location.href = `http://${window.location.host}/${route}`;
+  const onScreensClick = (route: string) => {
+    window.location.href = `http://${window.location.host}/config/screens`;
   };
 
   return (
     <header className={styles.configHeader}>
-      <button className={styles.headerButton} onClick={() => onButtonClick('config')}>Beer</button>
-      <button className={styles.headerButton} onClick={() => onButtonClick('config/spirits')}>Spirits</button>
+      <button className={styles.headerButton} onClick={() => onScreensClick('config')}>Screens</button>
     </header>
   );
 }
