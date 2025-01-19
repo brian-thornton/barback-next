@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import styles from "./FileUpload.module.css";
 
 type FileUploadProps = {
@@ -27,7 +27,7 @@ export const FileUpload = ({onFileUpload}: FileUploadProps) => {
         Upload Background Image
       </button>
     </div>
-  );
+  )
 }
 
 export default FileUpload;
