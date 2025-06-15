@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 import Table from "@/components/Table/Table";
 import savePreferences from "@/lib/preferences-helper";
+import { fetchPreferences } from "@/lib/preferences-helper";
 
 const Screens = () => {
   const [preferences, setPreferences] = useState<any>();

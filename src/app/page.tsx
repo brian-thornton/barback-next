@@ -54,15 +54,13 @@ export default function Home() {
   return (
     <main className={styles.main} style={{ backgroundImage: `url(./${preferences?.screens[screenIndex]?.name}_background.jpg)` }}>
       {preferences?.screens.length > 0 && (
-        <div>
-          <DisplayMenu
-            preferences={preferences}
-            headers={headers}
-            // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'rows' implicitly has an 'any' type.
-            rows={rows || [[]]}
-            colors={preferences.screens[screenIndex].colors}
-          />
-        </div>
+        <DisplayMenu
+          preferences={preferences}
+          headers={headers}
+          // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'rows' implicitly has an 'any' type.
+          rows={rows || [[]]}
+          colors={preferences.screens[screenIndex].colors}
+        />
       )}
       {preferences?.screens.length === 0 && (
         <div>

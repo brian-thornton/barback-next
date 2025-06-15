@@ -14,12 +14,12 @@ const createIfNotExists = (folder: string) => {
   if (!fs.existsSync(folder)) {
     fs.mkdirSync(folder);
   }
-}
+};
 
 export const write: IWrite = (type, id, object, storageLocation) => {
   createIfNotExists(path.join(storageLocation, type));
   fs.writeFileSync(path.join(storageLocation, type, `${id}.json`), JSON.stringify(object, null, 2));
-}
+};
 
 export const read = (type: string, id: string, storageLocation: string) => {
   try {
@@ -28,6 +28,6 @@ export const read = (type: string, id: string, storageLocation: string) => {
     createIfNotExists(`${storageLocation}/${type}`);
     return {};
   }
-}
+};
 
 export default read;

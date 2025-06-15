@@ -6,10 +6,17 @@
   flex-direction: column;
   min-height: 100vh;
   padding: 3rem;
+  width: 100%;
 }
 
 .container {
   animation: fade-in 3s;
+  width: 100%;
+  max-width: 100%;
+  padding: 2rem 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
 @keyframes fade-in {
@@ -29,6 +36,8 @@
   margin-bottom: 10px;
   opacity: 0.85;
   padding: 15px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .text {
@@ -36,11 +45,17 @@
   background-color: black;
   color: #FFFFFF;
   display: flex;
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 2vw, 2rem);
   font-weight: 700;
   height: 9vh;
   justify-content: center;
-  width: 20vw;
+  flex: 1;
+  min-width: 0;
+  padding: 0 1rem;
+  text-align: center;
+  word-wrap: break-word;
+  box-sizing: border-box;
+  min-height: 9vh;
 }
 
 .header {
@@ -48,10 +63,35 @@
   display: flex;
   flex-direction: row;
   flex: 1;
-  font-size: 35px;
+  font-size: clamp(1.75rem, 2.5vw, 2.5rem);
   font-weight: 900;
   gap: 1rem;
   justify-content: center;
   opacity: 0.85;
-  width: 20vw;
+  min-width: 0;
+  padding: 0 1rem;
+  text-align: center;
+  word-wrap: break-word;
+  box-sizing: border-box;
+  min-height: 9vh;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .main {
+    padding: 1rem;
+  }
+  
+  .container {
+    padding: 1rem 1rem 0;
+  }
+  
+  .row {
+    padding: 10px;
+    gap: 0.5rem;
+  }
+  
+  .text, .header {
+    padding: 0 0.5rem;
+  }
 }

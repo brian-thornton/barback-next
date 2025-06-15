@@ -1,24 +1,346 @@
 .container {
-  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #1a1a1a;
+  width: 100%;
+  position: relative;
+}
+
+.card {
+  background: #2d2d2d;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  padding: 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.header {
   display: flex;
-  flex-direction: column;
-  height: 100vh;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #404040;
 }
 
 .screenName {
-  font-size: 30px;
+  font-size: 2rem;
   font-weight: 700;
-  margin-top: 10px;
+  color: #ffffff;
+}
+
+.section {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #404040;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+}
+
+.tableSection {
+  background: #363636;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+}
+
+.colorSection {
+  background: #363636;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  border: 1px solid #404040;
+}
+
+.fileUploadSection {
+  background: #363636;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  border: 1px solid #404040;
+}
+
+.buttonRow {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: flex-end;
 }
 
 .saveButton {
-  background-color: black;
-  border-radius: 5px;
-  border: none;
-  color: white;
+  background-color: transparent;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  color: #e2e8f0;
   cursor: pointer;
-  height: 40px;
-  margin-top: 5px;
-  width: 100px;
+  height: 48px;
+  padding: 0 2rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.saveButton:hover {
+  background-color: #e2e8f0;
+  color: #1a1a1a;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.cancelButton {
+  background-color: transparent;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  color: #e2e8f0;
+  cursor: pointer;
+  height: 48px;
+  padding: 0 2rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.cancelButton:hover {
+  background-color: #e2e8f0;
+  color: #1a1a1a;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.previewSection {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #363636;
+  border-radius: 8px;
+  border: 2px dashed #404040;
+  transition: all 0.2s;
+  position: relative;
+  z-index: 1;
+}
+
+.previewSection:hover {
+  border-color: #4299e1;
+  background-color: #2c5282;
+}
+
+.previewTitle {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #e2e8f0;
+  margin-bottom: 1rem;
+}
+
+/* Modal styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background: #2d2d2d;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.modalHeader {
+  margin-bottom: 1.5rem;
+}
+
+.modalTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.modalText {
+  color: #ffffff;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+}
+
+.modalClose {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #ffffff;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.modalClose:hover {
+  color: #e53e3e;
+}
+
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.formInput {
+  border: 2px solid #404040;
+  border-radius: 8px;
+  height: 48px;
+  padding: 0 1rem;
+  font-size: 1rem;
+  transition: all 0.2s;
+  background-color: #363636;
+  color: #ffffff;
+}
+
+.formInput:focus {
+  border-color: #4299e1;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+}
+
+.errorMessage {
+  color: #fc8181;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.modalFooter {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: flex-end;
+}
+
+.modalButton {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modalButton.delete {
+  background-color: #e53e3e;
+  color: white;
+  border: none;
+}
+
+.modalButton.delete:hover {
+  background-color: #c53030;
+  transform: translateY(-1px);
+}
+
+.modalButton.cancel {
+  background-color: transparent;
+  color: #e2e8f0;
+  border: 2px solid #e2e8f0;
+}
+
+.modalButton.cancel:hover {
+  background-color: #e2e8f0;
+  color: #1a1a1a;
+  transform: translateY(-1px);
+}
+
+.columnList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  width: 100%;
+}
+
+.columnTag {
+  background: #363636;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #e2e8f0;
+  border: 1px solid #404040;
+}
+
+.removeColumn {
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.removeColumn:hover {
+  color: #fc8181;
+}
+
+.inputRow {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+  background: #2d2d2d;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #404040;
+}
+
+.input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid #404040;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #363636;
+  color: #ffffff;
+  transition: all 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+}
+
+.input::placeholder {
+  color: #718096;
 }

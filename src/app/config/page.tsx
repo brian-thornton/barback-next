@@ -1,68 +1,56 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "./page.module.css";
-import ConfigurationHeader from "../../components/ConfigurationHeader/ConfigurationHeader";
+import Table from "@/components/Table/Table";
+import savePreferences from "@/lib/preferences-helper";
+import ConfigurationHeader from "@/components/ConfigurationHeader/ConfigurationHeader";
 
-import { postData } from "../../lib/service-client";
-
-enum MenuType {
-  FullWidth = "fullWidth",
-  TwoColumn = "twoColumn",
-};
-
-export default function BeerConfigPage() {
-  const [colors, setColors] = useState<any>(undefined);
-  const savePreferences = async () => await postData("/api/preferences", { preferences });
-
-  const [preferences, setPreferences] = useState<any>({
-    beerMenuType: MenuType.FullWidth,
-    beerRowBackgroundColor: colors?.rowBackgroundColor || "#000000",
-    beerCellBackgroundColor: colors?.cellBackgroundColor || "#000000",
-    beerHeaderTextColor: colors?.headerTextColor || "#000000",
-    beerCellTextColor: colors?.cellTextColor || "#000000",
-  });
-
-  useEffect(() => {
-    if (colors) {
-      setPreferences({
-        beerCellBackgroundColor: colors.cellBackgroundColor,
-        beerCellTextColor: colors.cellTextColor,
-        beerHeaderTextColor: colors.headerTextColor,
-        beerMenuType: MenuType.FullWidth,
-        beerRowBackgroundColor: colors.rowBackgroundColor,
-      });
-    }
-  }, [colors]);
+const Screens = () => {
+  const [preferences, setPreferences] = useState<any>();
 
   const loadPreferences = async () => {
     try {
       const res = await fetch(`/api/preferences`);
       const data = await res.json();
-      setPreferences(data.preferences || {});
-      setColors({
-        cellBackgroundColor: data?.preferences?.beerCellBackgroundColor || "#000000",
-        cellTextColor: data?.preferences?.beerCellTextColor || "#000000",
-        headerTextColor: data?.preferences?.beerHeaderTextColor || "#000000",
-        rowBackgroundColor: data?.preferences?.beerRowBackgroundColor || "#000000",
-      })
+      setPreferences(data.preferences);
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    if (preferences.beerRowBackgroundColor !== "#000000") {
-      savePreferences();
-    }
-  }, [preferences]);
-
-  useEffect(() => {
     loadPreferences();
   }, []);
 
+  useEffect(() => {
+    if (preferences?.screens) {
+      savePreferences(preferences);
+    }
+  }, [preferences]);
+
+  const onEditClick = (index: number) => {
+    const screen = preferences.screens[index];
+    window.location.replace(`/config/screens/edit/${screen.name}`);
+  };
+
+  const columns = ["Name", "Columns"];
+  const data = preferences?.screens?.map((screen: any) => [screen.name, screen.headers.join(", ")]);
+
   return (
-    <main className={styles.main}>
+    <div className={styles.container}>
       <ConfigurationHeader />
-    </main>
+      <Table
+        columns={columns || []}
+        data={data || []}
+        onDeleteClick={(index: number) => {
+          preferences.screens.splice(index, 1);
+          setPreferences({ ...preferences });
+        }}
+        onEditClick={onEditClick}
+        addUrl="/config/screens/add"
+      />
+    </div>
   );
-}
+};
+
+export default Screens;

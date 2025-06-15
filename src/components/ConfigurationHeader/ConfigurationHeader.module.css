@@ -1,17 +1,30 @@
 .configHeader {
-  background-color: darkgray;
+  background-color: #2d2d2d;
   display: flex;
   height: 7vh;
   width: 100vw;
+  border-bottom: 1px solid #404040;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
 }
 
 .headerButton {
-  background-color: black;
-  border-radius: 5px;
-  border: none;
-  color: white;
+  background-color: transparent;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  color: #e2e8f0;
   cursor: pointer;
   height: 40px;
-  margin: 10px;
+  margin: 10px 10px 10px 1rem;
   width: 60px;
+  transition: all 0.2s;
+}
+
+.headerButton:hover {
+  background-color: #e2e8f0;
+  color: #1a1a1a;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }

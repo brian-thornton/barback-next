@@ -4,9 +4,7 @@ import { ColorType } from "@/components/ColorPicker/ColorPicker";
 
 type DisplayMenuProps = {
   headers: string[];
-  rows: [
-    string[],
-  ],
+  rows: string[][];
   colors: ColorType;
 };
 
@@ -26,10 +24,12 @@ export default function DisplayMenu({ headers, rows, colors }: DisplayMenuProps)
             <div key={index} className={styles.header} style={cellStyles}>{header}</div>
           ))}
         </div>
-        {rows.map((row: any, index) => (
-          <div key={index} className={styles.row} style={{ background: rowBackgroundColor }}>
-            {row.map((cell: string, index: number) => (
-              <div key={index} className={styles.text} style={cellStyles}>{cell}</div>
+        {rows.map((row: string[], rowIndex) => (
+          <div key={rowIndex} className={styles.row} style={{ background: rowBackgroundColor }}>
+            {headers.map((_, colIndex) => (
+              <div key={colIndex} className={styles.text} style={cellStyles}>
+                {row[colIndex] || ''}
+              </div>
             ))}
           </div>
         ))}

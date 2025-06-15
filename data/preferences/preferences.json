@@ -2,35 +2,30 @@
   "preferences": {
     "screens": [
       {
-        "name": "Beer",
+        "name": "Bourbon",
         "headers": [
           "Name",
+          "Distiller",
+          "ABV",
+          "Age",
           "Type",
-          "Brewery"
+          "region"
         ],
         "rows": [
           [
-            "Bud Light",
-            "Lager",
-            "AB"
-          ],
-          [
-            "Gear Head",
-            "Hazy IPA",
-            "New Trail"
-          ],
-          [
-            "Guiness",
-            "Stout",
-            "Guiness"
+            "sdfdsfsd",
+            "fdsfsd",
+            "fdsfds",
+            "12"
           ]
         ],
         "colors": {
-          "rowBackgroundColor": "#9a9a9a",
-          "cellBackgroundColor": "#ffffff",
+          "cellBackgroundColor": "#FFFFFF",
+          "cellTextColor": "#000000",
           "headerTextColor": "#000000",
-          "cellTextColor": "#020202"
-        }
+          "rowBackgroundColor": "#003366"
+        },
+        "backgroundImage": null
       }
     ]
   }

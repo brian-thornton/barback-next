@@ -1,8 +1,4 @@
-import { Preferences } from "@/types/preferences-types";
-
 export const savePreferences = async (preferences: any) => {
-  console.log(preferences)
-
   try {
     await fetch(`/api/preferences`, {
       method: "POST",

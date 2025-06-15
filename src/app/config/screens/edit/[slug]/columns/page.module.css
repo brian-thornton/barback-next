@@ -1,0 +1,24 @@
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: flex-start;
+}
+
+.screenName {
+  font-size: 30px;
+  font-weight: 700;
+  margin-top: 10px;
+}
+
+.saveButton {
+  background-color: black;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  height: 40px;
+  margin-top: 5px;
+  width: 100px;
+}

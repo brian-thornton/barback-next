@@ -2,7 +2,7 @@ import styles from "./ConfigurationHeader.module.css";
 
 const ConfigurationHeader = () => {
   const onScreensClick = (route: string) => {
-    window.location.href = `http://${window.location.host}/config/screens`;
+    window.location.href = `http://${window.location.host}/config`;
   };
 
   return (
