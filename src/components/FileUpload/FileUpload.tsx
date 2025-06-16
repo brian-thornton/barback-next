@@ -140,7 +140,7 @@ const FileUpload = ({ onFileUpload }: FileUploadProps) => {
         <div className={styles.fileInfo}>
           <div className={styles.filePreview}>
             {previewUrl ? (
-              <img src={previewUrl} alt="Preview" className={styles.previewImage} />
+              <></>
             ) : (
               <FiFile className={styles.fileIcon} />
             )}

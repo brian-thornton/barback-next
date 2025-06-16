@@ -1,9 +1,23 @@
 .container {
   min-height: 100vh;
   padding: 2rem;
+  padding-top: calc(7vh + 2rem);
   background-color: #1a1a1a;
   width: 100%;
   position: relative;
+  z-index: 1;
+  background-image: none !important;
+}
+
+.main {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #1a1a1a;
+  position: relative;
+  z-index: 1;
+  background-image: none !important;
 }
 
 .card {
@@ -35,9 +49,13 @@
 }
 
 .section {
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid #404040;
+  background-color: #2d2d2d;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  width: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 .sectionTitle {
@@ -65,11 +83,8 @@
 }
 
 .fileUploadSection {
-  background: #363636;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-top: 1rem;
-  border: 1px solid #404040;
+  position: relative;
+  z-index: 2;
 }
 
 .buttonRow {
@@ -80,25 +95,25 @@
 }
 
 .saveButton {
-  background-color: transparent;
-  border: 2px solid #e2e8f0;
+  background-color: #4299e1;
+  border: none;
   border-radius: 8px;
-  color: #e2e8f0;
+  color: white;
   cursor: pointer;
-  height: 48px;
-  padding: 0 2rem;
-  font-weight: 500;
-  transition: all 0.2s;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.2s;
+  position: relative;
+  z-index: 2;
 }
 
 .saveButton:hover {
-  background-color: #e2e8f0;
-  color: #1a1a1a;
+  background-color: #3182ce;
   transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .cancelButton {
@@ -121,29 +136,6 @@
   color: #1a1a1a;
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.previewSection {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  background: #363636;
-  border-radius: 8px;
-  border: 2px dashed #404040;
-  transition: all 0.2s;
-  position: relative;
-  z-index: 1;
-}
-
-.previewSection:hover {
-  border-color: #4299e1;
-  background-color: #2c5282;
-}
-
-.previewTitle {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #e2e8f0;
-  margin-bottom: 1rem;
 }
 
 /* Modal styles */
@@ -301,12 +293,32 @@
   font-size: 0.875rem;
   color: #e2e8f0;
   border: 1px solid #404040;
+  cursor: move;
+  user-select: none;
+  transition: all 0.2s;
+}
+
+.columnTag:hover {
+  background: #404040;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.dragHandle {
+  color: #718096;
+  cursor: move;
+  font-size: 1rem;
+}
+
+.dragHandle:hover {
+  color: #e2e8f0;
 }
 
 .removeColumn {
   color: #e2e8f0;
   cursor: pointer;
   transition: color 0.2s;
+  margin-left: auto;
 }
 
 .removeColumn:hover {

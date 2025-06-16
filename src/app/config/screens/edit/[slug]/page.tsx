@@ -4,7 +4,7 @@ import styles from "./page.module.css";
 import Table from "@/components/Table/Table";
 import { savePreferences } from "@/lib/preferences-helper";
 import { ColorPicker, ColorType } from "@/components/ColorPicker/ColorPicker";
-import { BsArrowLeft, BsSave, BsPlus, BsX } from "react-icons/bs";
+import { BsArrowLeft, BsSave, BsPlus, BsX, BsGripVertical } from "react-icons/bs";
 import FileUpload from "@/components/FileUpload/FileUpload";
 
 // Simple Modal Component
@@ -28,9 +28,9 @@ const EditScreen = () => {
   const [addError, setAddError] = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [rowToDelete, setRowToDelete] = useState<number | null>(null);
-  const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
   const [newHeader, setNewHeader] = useState<string>("");
   const [showAddColumnModal, setShowAddColumnModal] = useState(false);
+  const [draggedColumn, setDraggedColumn] = useState<number | null>(null);
   const lastPart = window.location.href.split("/").pop();
   const screen = preferences?.screens?.find((screen: any) => screen.name === lastPart);
   const headers = screen?.headers || [];
@@ -57,7 +57,6 @@ const EditScreen = () => {
     if (preferences) {
       const currentScreen = preferences?.screens?.find((screen: any) => screen.name === lastPart);
       setColors(currentScreen?.colors ?? defaultColors);
-      setBackgroundImage(currentScreen?.backgroundImage ?? null);
     }
   }, [preferences])
 
@@ -76,7 +75,6 @@ const EditScreen = () => {
         headers: screens[index].headers,
         rows: screens[index].rows,
         colors: colors,
-        backgroundImage: backgroundImage,
       };
 
       setPreferences({ ...preferences, screens });
@@ -185,17 +183,13 @@ const EditScreen = () => {
         throw new Error('Upload failed');
       }
       
-      const data = await response.json();
-      const imageUrl = `/${lastPart}_background.jpg`;
-      setBackgroundImage(imageUrl);
-      
       // Update preferences with new background image
       const screens = preferences.screens || [];
       const index = screens.findIndex((screen: any) => screen.name === lastPart);
       
       screens[index] = {
         ...screens[index],
-        backgroundImage: imageUrl,
+        backgroundImage: `/${lastPart}_background.jpg`,
       };
       
       setPreferences({ ...preferences, screens });
@@ -252,6 +246,40 @@ const EditScreen = () => {
     }
   };
 
+  const handleDragStart = (index: number) => {
+    setDraggedColumn(index);
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    if (draggedColumn === null) return;
+
+    const newHeaders = [...headers];
+    const draggedItem = newHeaders[draggedColumn];
+    newHeaders.splice(draggedColumn, 1);
+    newHeaders.splice(index, 0, draggedItem);
+
+    try {
+      const screens = preferences.screens || [];
+      const screenIndex = screens.findIndex((screen: any) => screen.name === lastPart);
+      
+      screens[screenIndex] = {
+        ...screens[screenIndex],
+        headers: newHeaders,
+      };
+
+      setPreferences({ ...preferences, screens });
+      savePreferences({ ...preferences, screens });
+      setDraggedColumn(index);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleDragEnd = () => {
+    setDraggedColumn(null);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.card}>
@@ -282,7 +310,15 @@ const EditScreen = () => {
             {headers.length > 0 && (
               <div className={styles.columnList}>
                 {headers.map((header: string, index: number) => (
-                  <div key={index} className={styles.columnTag}>
+                  <div 
+                    key={index} 
+                    className={styles.columnTag}
+                    draggable
+                    onDragStart={() => handleDragStart(index)}
+                    onDragOver={(e) => handleDragOver(e, index)}
+                    onDragEnd={handleDragEnd}
+                  >
+                    <BsGripVertical className={styles.dragHandle} />
                     {header}
                     <BsX 
                       className={styles.removeColumn} 
@@ -318,39 +354,6 @@ const EditScreen = () => {
           <h2 className={styles.sectionTitle}>Background Image</h2>
           <div className={styles.fileUploadSection}>
             <FileUpload onFileUpload={handleBackgroundUpload} />
-            <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-start' }}>
-              <button className={styles.saveButton} onClick={handleAddRow}>
-                <BsPlus /> Add Row
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.previewSection}>
-          <h3 className={styles.previewTitle}>Preview</h3>
-          <div style={{ 
-            backgroundColor: colors?.rowBackgroundColor,
-            padding: '1rem',
-            borderRadius: '8px',
-            backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}>
-            <div style={{ 
-              color: colors?.headerTextColor,
-              fontWeight: 'bold',
-              marginBottom: '0.5rem'
-            }}>
-              {headers.join(' | ')}
-            </div>
-            <div style={{ 
-              backgroundColor: colors?.cellBackgroundColor,
-              color: colors?.cellTextColor,
-              padding: '0.5rem',
-              borderRadius: '4px'
-            }}>
-              Sample Data
-            </div>
           </div>
         </div>
 

@@ -6,10 +6,9 @@
         "headers": [
           "Name",
           "Distiller",
-          "ABV",
           "Age",
           "Type",
-          "region"
+          "ABV"
         ],
         "rows": [
           [
@@ -20,12 +19,12 @@
           ]
         ],
         "colors": {
+          "rowBackgroundColor": "#4c4d4e",
           "cellBackgroundColor": "#FFFFFF",
-          "cellTextColor": "#000000",
           "headerTextColor": "#000000",
-          "rowBackgroundColor": "#003366"
+          "cellTextColor": "#000000"
         },
-        "backgroundImage": null
+        "backgroundImage": "/Bourbon_background.jpg"
       }
     ]
   }
