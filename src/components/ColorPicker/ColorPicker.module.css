@@ -10,12 +10,58 @@
   flex-direction: column;
   gap: 0.75rem;
   padding: 1rem;
-  background-color: #f8fafc;
+  background-color: #363636;
   border-radius: 8px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #404040;
 }
 
-.colorPicker > div {
+.colorLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 0.5rem;
+}
+
+.colorPicker > div:not(.fontPreview) {
   width: 100% !important;
   height: 200px !important;
+}
+
+.fontSizeSelect {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #404040;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #2d2d2d;
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.fontSizeSelect:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+}
+
+.fontSizeSelect option {
+  background-color: #2d2d2d;
+  color: #e2e8f0;
+}
+
+.fontPreview {
+  width: 100%;
+  padding: 1rem;
+  background-color: #2d2d2d;
+  border-radius: 8px;
+  border: 2px solid #404040;
+  text-align: center;
+  font-weight: 900;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100px;
 }

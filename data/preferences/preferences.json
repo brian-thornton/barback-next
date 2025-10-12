@@ -1,31 +1,7 @@
 {
   "preferences": {
-    "screens": [
-      {
-        "name": "Bourbon",
-        "headers": [
-          "Name",
-          "Distiller",
-          "Age",
-          "Type",
-          "ABV"
-        ],
-        "rows": [
-          [
-            "sdfdsfsd",
-            "fdsfsd",
-            "fdsfds",
-            "12"
-          ]
-        ],
-        "colors": {
-          "rowBackgroundColor": "#4c4d4e",
-          "cellBackgroundColor": "#FFFFFF",
-          "headerTextColor": "#000000",
-          "cellTextColor": "#000000"
-        },
-        "backgroundImage": "/Bourbon_background.jpg"
-      }
-    ]
+    "cycleInterval": 10,
+    "rowsPerPage": 4,
+    "screens": []
   }
 }

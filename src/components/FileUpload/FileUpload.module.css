@@ -11,6 +11,7 @@
   cursor: pointer;
   transition: all 0.2s ease;
   background-color: #2d2d2d;
+  outline: none;
 }
 
 .dropzone:hover {
@@ -23,15 +24,33 @@
   background-color: #363636;
 }
 
+.dropzone.focused {
+  border-color: #48bb78;
+  background-color: #363636;
+  box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.2);
+}
+
 .dropzone.error {
   border-color: #e53e3e;
   background-color: #2d2d2d;
 }
 
+.iconContainer {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
 .uploadIcon {
   font-size: 2rem;
   color: #e2e8f0;
-  margin-bottom: 1rem;
+}
+
+.clipboardIcon {
+  font-size: 2rem;
+  color: #48bb78;
 }
 
 .dropzoneText {

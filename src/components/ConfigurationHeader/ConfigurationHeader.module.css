@@ -1,30 +1,40 @@
 .configHeader {
-  background-color: #2d2d2d;
-  display: flex;
-  height: 7vh;
-  width: 100vw;
-  border-bottom: 1px solid #404040;
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 100;
+  right: 0;
+  height: 7vh;
+  background-color: #2d2d2d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1rem;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .headerButton {
-  background-color: transparent;
-  border: 2px solid #e2e8f0;
+  background-color: #4299e1;
+  color: white;
+  border: none;
   border-radius: 8px;
-  color: #e2e8f0;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
-  height: 40px;
-  margin: 10px 10px 10px 1rem;
-  width: 60px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   transition: all 0.2s;
 }
 
 .headerButton:hover {
-  background-color: #e2e8f0;
-  color: #1a1a1a;
+  background-color: #3182ce;
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.headerButton svg {
+  font-size: 1.2rem;
 }

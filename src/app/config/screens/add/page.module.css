@@ -47,14 +47,22 @@
 
 .inputGroup {
   display: flex;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
 .inputLabel {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.inputHelper {
   font-size: 0.875rem;
-  font-weight: 500;
-  color: #4a5568;
+  color: #a0aec0;
+  margin: 0;
+  line-height: 1.5;
 }
 
 .input {

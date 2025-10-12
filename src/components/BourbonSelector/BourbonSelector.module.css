@@ -1,0 +1,297 @@
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+}
+
+.searchContainer {
+  position: relative;
+}
+
+.searchInputContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 12px 16px;
+  transition: border-color 0.2s ease;
+}
+
+.searchInputContainer:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.searchIcon {
+  color: #6b7280;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.searchInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #111827;
+  background: transparent;
+}
+
+.searchInput::placeholder {
+  color: #9ca3af;
+}
+
+.clearButton {
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.clearButton:hover {
+  color: #374151;
+  background-color: #f3f4f6;
+}
+
+.filtersContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  padding: 16px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filterGroup label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.filterSelect {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #374151;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.resultsContainer {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: #6b7280;
+  gap: 8px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.errorContainer {
+  padding: 16px;
+  text-align: center;
+}
+
+.errorText {
+  color: #dc2626;
+  font-size: 14px;
+}
+
+.noResultsContainer {
+  padding: 20px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.bourbonList {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.bourbonItem {
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #f3f4f6;
+  transition: background-color 0.2s ease;
+}
+
+.bourbonItem:hover {
+  background-color: #f9fafb;
+}
+
+.bourbonItem:last-child {
+  border-bottom: none;
+}
+
+.bourbonInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bourbonName {
+  font-weight: 600;
+  color: #111827;
+  font-size: 15px;
+}
+
+.bourbonDetails {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.separator {
+  color: #d1d5db;
+}
+
+.distiller {
+  font-weight: 500;
+}
+
+.region {
+  text-transform: capitalize;
+}
+
+.abv {
+  font-weight: 500;
+}
+
+.bourbonMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.priceTag {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.age {
+  font-size: 12px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.selectedBourbon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #f0f9ff;
+  border: 1px solid #0ea5e9;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+
+.selectedBourbonInfo {
+  flex: 1;
+}
+
+.selectedBourbonName {
+  font-weight: 600;
+  color: #0c4a6e;
+  font-size: 15px;
+}
+
+.selectedBourbonDetails {
+  font-size: 13px;
+  color: #0369a1;
+  margin-top: 2px;
+}
+
+.removeSelectedButton {
+  background: none;
+  border: none;
+  color: #0369a1;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.removeSelectedButton:hover {
+  color: #0c4a6e;
+  background-color: #e0f2fe;
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .filtersContainer {
+    grid-template-columns: 1fr;
+  }
+  
+  .bourbonDetails {
+    flex-wrap: wrap;
+  }
+  
+  .bourbonMeta {
+    flex-wrap: wrap;
+  }
+}
+

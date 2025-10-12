@@ -2,71 +2,82 @@
 
 import { useState } from 'react';
 import styles from './page.module.css';
-import { bourbonApi } from '@/lib/bourbon-api';
-import { Bourbon } from '@/data/bourbons';
-import Image from 'next/image';
+import BourbonSelector from '@/components/BourbonSelector/BourbonSelector';
+import { Bourbon } from '@/types/bourbon-types';
 
 export default function AddPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState<Bourbon[]>([]);
-  const [activeTab, setActiveTab] = useState('bourbons');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({});
-  const [page, setPage] = useState(1);
-  const [totalResults, setTotalResults] = useState(0);
+  const [selectedBourbon, setSelectedBourbon] = useState<Bourbon | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
+  const [isManualEntry, setIsManualEntry] = useState(false);
+  const [manualBourbon, setManualBourbon] = useState<Partial<Bourbon>>({
+    name: '',
+    distiller: '',
+    abv: '',
+    region: '',
+    category: 'Bourbon',
+    price: 'Medium',
+    age: 'No age statement',
+  });
 
-  const handleImageError = (bourbonId: string) => {
-    setImageErrors(prev => ({ ...prev, [bourbonId]: true }));
+  const handleBourbonSelect = (bourbon: Bourbon | null) => {
+    setSelectedBourbon(bourbon);
+    setIsManualEntry(false);
   };
 
-  const searchBourbons = async (query: string) => {
+  const handleManualSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!manualBourbon.name || !manualBourbon.distiller) {
+      alert('Please fill in at least Name and Distiller');
+      return;
+    }
+
+    setIsAdding(true);
     try {
-      setIsLoading(true);
-      setError(null);
-      const result = await bourbonApi.search({ query });
-      setSearchResults(result.data);
-      setTotalResults(result.total);
-      setPage(1);
-    } catch (err) {
-      setError('Failed to search bourbons. Please try again.');
-      console.error('Search error:', err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSearch = () => {
-    if (activeTab === 'bourbons') {
-      searchBourbons(searchQuery);
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
-
-  const loadMore = async () => {
-    if (isLoading) return;
-    
-    setIsLoading(true);
-    try {
-      const nextPage = page + 1;
-      const result = await bourbonApi.search({
-        query: searchQuery,
-        page: nextPage,
-        limit: 20
+      // Save to local database
+      const response = await fetch('/api/bourbons', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(manualBourbon),
       });
 
-      setSearchResults(prev => [...prev, ...result.data]);
-      setPage(nextPage);
+      if (response.ok) {
+        alert(`${manualBourbon.name} has been added to your database!`);
+        setManualBourbon({
+          name: '',
+          distiller: '',
+          abv: '',
+          region: '',
+          category: 'Bourbon',
+          price: 'Medium',
+          age: 'No age statement',
+        });
+        setIsManualEntry(false);
+      } else {
+        alert('Failed to add bourbon. Please try again.');
+      }
     } catch (error) {
-      console.error('Error loading more:', error);
-      setError('Failed to load more results. Please try again.');
+      console.error('Error adding bourbon:', error);
+      alert('Failed to add bourbon. Please try again.');
     } finally {
-      setIsLoading(false);
+      setIsAdding(false);
+    }
+  };
+
+  const handleAddBourbon = async () => {
+    if (!selectedBourbon) return;
+
+    setIsAdding(true);
+    try {
+      console.log('Adding bourbon:', selectedBourbon);
+      alert(`${selectedBourbon.name} has been added to your collection!`);
+      setSelectedBourbon(null);
+    } catch (error) {
+      console.error('Error adding bourbon:', error);
+      alert('Failed to add bourbon. Please try again.');
+    } finally {
+      setIsAdding(false);
     }
   };
 
@@ -74,75 +85,176 @@ export default function AddPage() {
     <div className={styles.container}>
       <h1 className={styles.title}>Add to Your Bourbon Collection</h1>
       
-      <div className={styles.tabsContainer}>
-        <div className={styles.tabsList}>
-          <button
-            className={`${styles.tabTrigger} ${activeTab === 'bourbons' ? styles.active : ''}`}
-            onClick={() => setActiveTab('bourbons')}
-          >
-            Bourbons
-          </button>
-        </div>
-
-        <div className={styles.searchContainer}>
-          <input
-            type="text"
-            className={styles.searchInput}
-            placeholder="Search by bourbon name, distiller, or category..."
-            value={searchQuery}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-            onKeyPress={handleKeyPress}
+      <div className={styles.content}>
+        <div className={styles.selectorContainer}>
+          <h2 className={styles.sectionTitle}>Select a Bourbon</h2>
+          <p className={styles.sectionDescription}>
+            Search from your local bourbon database or add a new one manually. Your database will build up as you add items.
+          </p>
+          
+          <BourbonSelector
+            onBourbonSelect={handleBourbonSelect}
+            selectedBourbon={selectedBourbon}
+            placeholder="Search for bourbons, ryes, or Tennessee whiskeys..."
           />
-          <button 
-            className={styles.searchButton} 
-            onClick={handleSearch}
-            disabled={isLoading}
-          >
-            {isLoading ? 'Searching...' : 'Search'}
-          </button>
+
+          <div className={styles.manualEntryToggle}>
+            <button
+              className={styles.toggleButton}
+              onClick={() => {
+                setIsManualEntry(!isManualEntry);
+                setSelectedBourbon(null);
+              }}
+            >
+              {isManualEntry ? 'Cancel Manual Entry' : 'Add New Bourbon Manually'}
+            </button>
+          </div>
         </div>
 
-        {error && <p className={styles.error}>{error}</p>}
+        {isManualEntry && (
+          <div className={styles.manualEntryContainer}>
+            <h2 className={styles.sectionTitle}>Manual Entry</h2>
+            <form onSubmit={handleManualSubmit} className={styles.form}>
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Name*</label>
+                <input
+                  type="text"
+                  className={styles.input}
+                  value={manualBourbon.name}
+                  onChange={(e) => setManualBourbon({ ...manualBourbon, name: e.target.value })}
+                  required
+                />
+              </div>
 
-        {activeTab === 'bourbons' && (
-          <>
-            <div className={styles.grid}>
-              {searchResults.map((bourbon) => (
-                <div key={bourbon.id} className={styles.resultItem}>
-                  <div className={styles.resultImage}>
-                    <Image
-                      src={bourbon.image || '/placeholder-bourbon.jpg'}
-                      alt={bourbon.name}
-                      width={100}
-                      height={100}
-                      onError={() => handleImageError(bourbon.id)}
-                      style={{ objectFit: 'cover' }}
-                    />
-                  </div>
-                  <div className={styles.resultInfo}>
-                    <h3>{bourbon.name}</h3>
-                    <p>{bourbon.description}</p>
-                    {bourbon.category && <p>Category: {bourbon.category}</p>}
-                    {bourbon.distiller !== 'Unknown' && <p>Distiller: {bourbon.distiller}</p>}
-                    {bourbon.abv !== 'Unknown' && <p>ABV: {bourbon.abv}</p>}
-                    {bourbon.region !== 'Unknown' && <p>Region: {bourbon.region}</p>}
-                  </div>
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Distiller*</label>
+                <input
+                  type="text"
+                  className={styles.input}
+                  value={manualBourbon.distiller}
+                  onChange={(e) => setManualBourbon({ ...manualBourbon, distiller: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>ABV</label>
+                  <input
+                    type="text"
+                    className={styles.input}
+                    value={manualBourbon.abv}
+                    onChange={(e) => setManualBourbon({ ...manualBourbon, abv: e.target.value })}
+                    placeholder="e.g. 45%"
+                  />
                 </div>
-              ))}
-            </div>
-            
-            {searchResults.length > 0 && searchResults.length < totalResults && (
-              <div className={styles.loadMoreContainer}>
-                <button 
-                  className={styles.loadMoreButton}
-                  onClick={loadMore}
-                  disabled={isLoading}
+
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Age</label>
+                  <input
+                    type="text"
+                    className={styles.input}
+                    value={manualBourbon.age}
+                    onChange={(e) => setManualBourbon({ ...manualBourbon, age: e.target.value })}
+                    placeholder="e.g. 10 years"
+                  />
+                </div>
+              </div>
+
+              <div className={styles.formRow}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Region</label>
+                  <input
+                    type="text"
+                    className={styles.input}
+                    value={manualBourbon.region}
+                    onChange={(e) => setManualBourbon({ ...manualBourbon, region: e.target.value })}
+                    placeholder="e.g. Kentucky"
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Category</label>
+                  <select
+                    className={styles.input}
+                    value={manualBourbon.category}
+                    onChange={(e) => setManualBourbon({ ...manualBourbon, category: e.target.value })}
+                  >
+                    <option value="Bourbon">Bourbon</option>
+                    <option value="Rye">Rye</option>
+                    <option value="Tennessee Whiskey">Tennessee Whiskey</option>
+                    <option value="Scotch">Scotch</option>
+                    <option value="Irish Whiskey">Irish Whiskey</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Price Range</label>
+                <select
+                  className={styles.input}
+                  value={manualBourbon.price}
+                  onChange={(e) => setManualBourbon({ ...manualBourbon, price: e.target.value })}
                 >
-                  {isLoading ? 'Loading...' : 'Load More'}
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+                </select>
+              </div>
+
+              <div className={styles.actionContainer}>
+                <button
+                  type="submit"
+                  className={styles.addButton}
+                  disabled={isAdding}
+                >
+                  {isAdding ? 'Adding...' : 'Add to Database'}
                 </button>
               </div>
-            )}
-          </>
+            </form>
+          </div>
+        )}
+
+        {selectedBourbon && !isManualEntry && (
+          <div className={styles.selectedContainer}>
+            <h2 className={styles.sectionTitle}>Selected Bourbon</h2>
+            <div className={styles.bourbonCard}>
+              <div className={styles.bourbonDetails}>
+                <h3 className={styles.bourbonName}>{selectedBourbon.name}</h3>
+                <div className={styles.bourbonMeta}>
+                  <span className={styles.distiller}>{selectedBourbon.distiller}</span>
+                  <span className={styles.separator}>•</span>
+                  <span className={styles.region}>{selectedBourbon.region}</span>
+                  <span className={styles.separator}>•</span>
+                  <span className={styles.abv}>{selectedBourbon.abv}</span>
+                </div>
+                <div className={styles.bourbonInfo}>
+                  <div className={styles.infoItem}>
+                    <span className={styles.infoLabel}>Category:</span>
+                    <span className={styles.infoValue}>{selectedBourbon.category}</span>
+                  </div>
+                  <div className={styles.infoItem}>
+                    <span className={styles.infoLabel}>Age:</span>
+                    <span className={styles.infoValue}>{selectedBourbon.age}</span>
+                  </div>
+                  <div className={styles.infoItem}>
+                    <span className={styles.infoLabel}>Price Range:</span>
+                    <span className={styles.infoValue}>{selectedBourbon.price}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className={styles.actionContainer}>
+              <button
+                className={styles.addButton}
+                onClick={handleAddBourbon}
+                disabled={isAdding}
+              >
+                {isAdding ? 'Adding...' : 'Add to Collection'}
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>

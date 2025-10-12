@@ -110,3 +110,67 @@
   display: flex;
   flex-direction: column;
 }
+
+.settingsCard {
+  background-color: #2d2d2d;
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid #404040;
+}
+
+.settingsTitle {
+  color: #e2e8f0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.settingRow {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.settingLabel {
+  color: #e2e8f0;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.settingHelper {
+  color: #a0aec0;
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+.settingControl {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.settingValue {
+  color: #4299e1;
+  font-size: 1.125rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  background-color: #363636;
+  border-radius: 8px;
+  border: 1px solid #404040;
+}
+
+.screensSection {
+  margin-top: 2rem;
+}
+
+.sectionHeader {
+  color: #e2e8f0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}

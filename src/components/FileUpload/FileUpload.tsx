@@ -1,6 +1,6 @@
 "use client";
-import { useState, useCallback } from "react";
-import { FiUpload, FiX, FiFile } from "react-icons/fi";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { FiUpload, FiX, FiFile, FiClipboard } from "react-icons/fi";
 import styles from "./FileUpload.module.css";
 
 interface FileUploadProps {
@@ -13,8 +13,10 @@ const FileUpload = ({ onFileUpload }: FileUploadProps) => {
   const [error, setError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [isPasteFocused, setIsPasteFocused] = useState(false);
+  const pasteAreaRef = useRef<HTMLDivElement>(null);
 
-  const validateFile = (file: File) => {
+  const validateFile = useCallback((file: File) => {
     const validTypes = ["image/jpeg", "image/png", "image/gif"];
     if (!validTypes.includes(file.type)) {
       setError("Please upload a valid image file (JPEG, PNG, or GIF)");
@@ -27,9 +29,9 @@ const FileUpload = ({ onFileUpload }: FileUploadProps) => {
     }
 
     return true;
-  };
+  }, []);
 
-  const handleFile = async (file: File) => {
+  const handleFile = useCallback(async (file: File) => {
     setError(null);
     
     if (!validateFile(file)) {
@@ -54,7 +56,7 @@ const FileUpload = ({ onFileUpload }: FileUploadProps) => {
     } finally {
       setIsUploading(false);
     }
-  };
+  }, [validateFile, onFileUpload]);
 
   const handleDragEnter = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -82,7 +84,7 @@ const FileUpload = ({ onFileUpload }: FileUploadProps) => {
     if (file) {
       handleFile(file);
     }
-  }, []);
+  }, [handleFile]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -97,6 +99,41 @@ const FileUpload = ({ onFileUpload }: FileUploadProps) => {
     setError(null);
   };
 
+  const handlePaste = useCallback(async (e: ClipboardEvent) => {
+    e.preventDefault();
+    
+    const items = e.clipboardData?.items;
+    if (!items) return;
+
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      
+      // Check if the clipboard item is an image
+      if (item.type.indexOf('image') !== -1) {
+        const blob = item.getAsFile();
+        if (blob) {
+          // Convert blob to File with a proper name
+          const file = new File([blob], `pasted-image-${Date.now()}.png`, { type: blob.type });
+          await handleFile(file);
+        }
+        break;
+      }
+    }
+  }, [handleFile]);
+
+  useEffect(() => {
+    const pasteArea = pasteAreaRef.current;
+    if (pasteArea) {
+      pasteArea.addEventListener('paste', handlePaste as unknown as EventListener);
+    }
+
+    return () => {
+      if (pasteArea) {
+        pasteArea.removeEventListener('paste', handlePaste as unknown as EventListener);
+      }
+    };
+  }, [handlePaste]);
+
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return "0 Bytes";
     const k = 1024;
@@ -108,12 +145,19 @@ const FileUpload = ({ onFileUpload }: FileUploadProps) => {
   return (
     <div className={styles.container}>
       <div
-        className={`${styles.dropzone} ${isDragging ? styles.active : ""} ${error ? styles.error : ""}`}
+        ref={pasteAreaRef}
+        tabIndex={0}
+        className={`${styles.dropzone} ${isDragging ? styles.active : ""} ${isPasteFocused ? styles.focused : ""} ${error ? styles.error : ""}`}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
-        onClick={() => document.getElementById('fileInput')?.click()}
+        onClick={() => {
+          document.getElementById('fileInput')?.click();
+          pasteAreaRef.current?.focus();
+        }}
+        onFocus={() => setIsPasteFocused(true)}
+        onBlur={() => setIsPasteFocused(false)}
       >
         <input
           id="fileInput"
@@ -123,11 +167,16 @@ const FileUpload = ({ onFileUpload }: FileUploadProps) => {
           onChange={handleFileSelect}
           style={{ display: 'none' }}
         />
-        <FiUpload className={styles.uploadIcon} />
+        <div className={styles.iconContainer}>
+          <FiUpload className={styles.uploadIcon} />
+          <FiClipboard className={styles.clipboardIcon} />
+        </div>
         <p className={styles.dropzoneText}>
           {isDragging
             ? "Drop the file here"
-            : "Drag and drop a file here, or click to select"}
+            : isPasteFocused
+            ? "Paste an image from your clipboard (Ctrl+V / Cmd+V)"
+            : "Drag, click, or paste an image"}
         </p>
         <p className={styles.supportedFormats}>
           Supported formats: JPEG, PNG, GIF (max 5MB)

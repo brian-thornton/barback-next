@@ -6,6 +6,8 @@ import { savePreferences } from "@/lib/preferences-helper";
 import { ColorPicker, ColorType } from "@/components/ColorPicker/ColorPicker";
 import { BsArrowLeft, BsSave, BsPlus, BsX, BsGripVertical } from "react-icons/bs";
 import FileUpload from "@/components/FileUpload/FileUpload";
+import BourbonSelector from "@/components/BourbonSelector/BourbonSelector";
+import { Bourbon } from "@/types/bourbon-types";
 
 // Simple Modal Component
 const Modal = ({ open, onClose, children }: { open: boolean; onClose: () => void; children: React.ReactNode }) => {
@@ -31,6 +33,8 @@ const EditScreen = () => {
   const [newHeader, setNewHeader] = useState<string>("");
   const [showAddColumnModal, setShowAddColumnModal] = useState(false);
   const [draggedColumn, setDraggedColumn] = useState<number | null>(null);
+  const [selectedBourbon, setSelectedBourbon] = useState<Bourbon | null>(null);
+  const [screenTitle, setScreenTitle] = useState<string>("");
   const lastPart = window.location.href.split("/").pop();
   const screen = preferences?.screens?.find((screen: any) => screen.name === lastPart);
   const headers = screen?.headers || [];
@@ -52,11 +56,15 @@ const EditScreen = () => {
       cellTextColor: "#000000",
       headerTextColor: "#000000",
       rowBackgroundColor: "#003366",
+      titleColor: "#FFFFFF",
+      titleFontSize: "4rem",
+      titleFontFamily: "system-ui, -apple-system, sans-serif",
     }
 
     if (preferences) {
       const currentScreen = preferences?.screens?.find((screen: any) => screen.name === lastPart);
       setColors(currentScreen?.colors ?? defaultColors);
+      setScreenTitle(currentScreen?.title || "");
     }
   }, [preferences])
 
@@ -72,6 +80,7 @@ const EditScreen = () => {
       screens[index] = {
         ...screens[index],
         name: screens[index].name,
+        title: screenTitle,
         headers: screens[index].headers,
         rows: screens[index].rows,
         colors: colors,
@@ -114,7 +123,41 @@ const EditScreen = () => {
   const handleAddRow = () => {
     setNewRow({});
     setAddError(null);
+    setSelectedBourbon(null);
     setShowAddModal(true);
+  };
+
+  const handleBourbonSelect = (bourbon: Bourbon | null) => {
+    setSelectedBourbon(bourbon);
+    if (bourbon) {
+      // Auto-populate common bourbon fields
+      const bourbonData: any = {};
+      
+      // Map bourbon data to common column names
+      if (headers.includes('Name') || headers.includes('Bourbon Name')) {
+        bourbonData[headers.find((h: string) => h.toLowerCase().includes('name')) || 'Name'] = bourbon.name;
+      }
+      if (headers.includes('Distiller') || headers.includes('Distillery')) {
+        bourbonData[headers.find((h: string) => h.toLowerCase().includes('distill')) || 'Distiller'] = bourbon.distiller;
+      }
+      if (headers.includes('ABV') || headers.includes('Proof')) {
+        bourbonData[headers.find((h: string) => h.toLowerCase().includes('abv') || h.toLowerCase().includes('proof')) || 'ABV'] = bourbon.abv;
+      }
+      if (headers.includes('Region')) {
+        bourbonData['Region'] = bourbon.region;
+      }
+      if (headers.includes('Category')) {
+        bourbonData['Category'] = bourbon.category;
+      }
+      if (headers.includes('Age')) {
+        bourbonData['Age'] = bourbon.age;
+      }
+      if (headers.includes('Price') || headers.includes('Price Range')) {
+        bourbonData[headers.find((h: string) => h.toLowerCase().includes('price')) || 'Price'] = bourbon.price;
+      }
+      
+      setNewRow(bourbonData);
+    }
   };
 
   const handleAddRowChange = (header: string, value: string) => {
@@ -292,6 +335,21 @@ const EditScreen = () => {
         </div>
 
         <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Screen Title (Optional)</h2>
+          <p className={styles.sectionDescription}>
+            Add a custom title that will be displayed at the top of this screen
+          </p>
+          <div className={styles.tableSection}>
+            <input 
+              className={styles.input} 
+              placeholder="Enter screen title (optional)" 
+              value={screenTitle}
+              onChange={(e) => setScreenTitle(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className={styles.section}>
           <h2 className={styles.sectionTitle}>Columns</h2>
           <div className={styles.tableSection}>
             <div className={styles.inputRow}>
@@ -371,6 +429,25 @@ const EditScreen = () => {
           <h2 className={styles.modalTitle}>Add New Row</h2>
         </div>
         <form onSubmit={handleAddRowSubmit} className={styles.modalForm}>
+          {/* Show bourbon selector for Bourbon screen */}
+          {lastPart === 'Bourbon' && (
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Search Bourbon</label>
+              <BourbonSelector
+                onBourbonSelect={handleBourbonSelect}
+                selectedBourbon={selectedBourbon}
+                placeholder="Search for a bourbon to auto-fill fields..."
+              />
+              {selectedBourbon && (
+                <div className={styles.bourbonPreview}>
+                  <p><strong>Selected:</strong> {selectedBourbon.name}</p>
+                  <p><strong>Distiller:</strong> {selectedBourbon.distiller}</p>
+                  <p><strong>ABV:</strong> {selectedBourbon.abv}</p>
+                </div>
+              )}
+            </div>
+          )}
+          
           {headers.map((header: string) => (
             <div key={header} className={styles.formGroup}>
               <label className={styles.formLabel}>{header}</label>
@@ -380,7 +457,7 @@ const EditScreen = () => {
                 value={newRow[header] || ''}
                 onChange={e => handleAddRowChange(header, e.target.value)}
                 placeholder={`Enter ${header}`}
-                autoFocus={header === headers[0]}
+                autoFocus={header === headers[0] && lastPart !== 'Bourbon'}
               />
             </div>
           ))}

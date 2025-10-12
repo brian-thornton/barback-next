@@ -11,11 +11,15 @@ const AddScreen = () => {
   const [newHeader, setNewHeader] = useState<string>("");
   const [preferences, setPreferences] = useState<any>();
   const [screenName, setScreenName] = useState<string>("");
+  const [screenTitle, setScreenTitle] = useState<string>("");
   const [colors, setColors] = useState<ColorType>({
     cellBackgroundColor: "#FFFFFF",
     cellTextColor: "#000000",
     headerTextColor: "#000000",
     rowBackgroundColor: "#003366",
+    titleColor: "#FFFFFF",
+    titleFontSize: "4rem",
+    titleFontFamily: "system-ui, -apple-system, sans-serif",
   });
 
   const loadPreferences = async () => {
@@ -46,6 +50,7 @@ const AddScreen = () => {
       const screens = preferences.screens || [];
       screens.push({
         name: screenName,
+        title: screenTitle,
         headers: headers,
         colors: colors,
       });
@@ -101,6 +106,19 @@ const AddScreen = () => {
               placeholder="Enter screen name" 
               value={screenName}
               onChange={(e) => setScreenName(e.target.value)} 
+            />
+          </div>
+
+          <div className={styles.inputGroup}>
+            <label className={styles.inputLabel}>Screen Title (Optional)</label>
+            <p className={styles.inputHelper}>
+              Add a custom title that will be displayed at the top of this screen
+            </p>
+            <input 
+              className={styles.input} 
+              placeholder="Enter screen title (optional)" 
+              value={screenTitle}
+              onChange={(e) => setScreenTitle(e.target.value)} 
             />
           </div>
 
